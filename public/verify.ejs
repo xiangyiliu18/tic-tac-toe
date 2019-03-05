@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Warm-up Project #2 </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/basic.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+​
+<div class="container">
+  <h2>Verify Form</h2>
+  <form method='post' id="verify">
+  	<div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="key">Key:</label>
+      <input type="text" class="form-control" id="key" placeholder="Enter your key" name="key" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+​<script type="text/javascript">
+   $("#verify").submit(function(event){
+        event.preventDefault();
+      // Ajax Post Call
+      $.ajax({
+        type: 'POST',
+        url: '/verify',
+        dataType: 'json',
+        data: JSON.stringify({
+           email: $("#email").val(),
+           key: $("#key").val()
+        }),
+        contentType: 'application/json',
+        success: function (res) {
+          console.log('Verify: ' + res.status);
+          if(res.status == 'OK'){
+               window.location.href = 'http://130.245.168.101/login';
+          }else if(res.status == 'ERROR'){
+                 alert("Verify failed")
+          }else{
+                alert('res.status problem in verify')
+          }
+        },
+        error: function (res) {
+            console.log('Verify: ' + res.status);
+        }
+      });
+   });
+</script>
+</body>
+</html>
+​

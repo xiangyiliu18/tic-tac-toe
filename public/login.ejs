@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Warm-up Project #2 -- Login Form </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/basic.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+​
+<div class="container">
+  <h2>Login</h2>
+  <div>
+  <form id="login">
+  	<div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" class="form-control" id="username" placeholder="Enter your username" name="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <br><br>
+</div>
+
+  <div>
+     <form id="adduser" method="get" action="/adduser">
+      <h4> No User Account? You can create one new account here ---> 
+      <button class="btn btn-success btn" type="submit">Create New User</button></h4>
+    </form>
+  </div>
+  
+</div>
+
+<script type="text/javascript">
+   $("#login").submit(function(event){
+        event.preventDefault();
+      // Ajax Post Call
+      $.ajax({
+        type: 'POST',
+        url: '/login',
+        dataType: 'json',
+        data: JSON.stringify({
+           username: $("#username").val(),
+           password: $("#password").val()
+        }),
+        contentType: 'application/json',
+        success: function (res) {
+           console.log('Login POST: ' + res.status);
+          if(res.status == 'OK'){
+              alert("Login Sucessfully");
+              window.location.href = 'http://130.245.168.101/ttt';
+          }else{
+              alert('Login Failed');
+          }
+        },
+        error: function (res) {
+          console.log('Login POST ' + res.status);
+        }
+      });
+   });
+</script>
+​
+</body>
+</html>
+​
