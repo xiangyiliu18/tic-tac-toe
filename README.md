@@ -44,9 +44,11 @@
 	| Packages/Dependecies | Usage    |
 	| -------- | -------- |
    | express  |          |
-	| nodemailer| send key via email(Pay attention: if use gmail, need make your Google account with 'less secure apps' being on)
-	| express-session'| support cookie-based session |
-	| crypto | Gnerate key
+	| nodemailer| Email usage |
+	| express-session| Stores only a session identifier on the client within a cookie and stores the session data on the server|
+	| crypto | Generate the key based on password |
+   | mongoose |         |
+   | winston  | Logger  |
 
 > ### UI mockups
 ---

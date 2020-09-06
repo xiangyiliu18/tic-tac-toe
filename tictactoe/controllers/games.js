@@ -2,29 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 /** ------------------ Get requests: HTML templates rendered  ------------------ */
-router.get('/list', (req, res) => {
-
+router.get('/', (req, res) => {
+    res.send('Games')
 })
+
+router.param('id', function(req, res, next, id) {
+    // Check if id is valid
+    console.log('doing name validations on ' + id);
+
+    // Once validation is done save the new item in the req
+    req.id = id;
+    // Go to the next thing
+    next(); 
+});
 
 router.get(':id', (req, res) => {
-
+    res.send('Single Game' + req.id)
 })
 
-/** ------------------ Post requests ------------------ */
-
-/**
- * Add new Uesr
- * Username, Password & Email are required
- */
-router.post('/addUser', (req, res) => {
-
-})
-
-/**
- * Verify newly created User using Email & Key received
- * Email & Key are required
- */
-router.post('/verify', (req, res) => {
-
-})
-
+module.exports = router;

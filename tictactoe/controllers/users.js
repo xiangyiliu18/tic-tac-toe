@@ -3,11 +3,11 @@ const router = express.Router();
 
 /** ------------------ Get requests: HTML templates rendered  ------------------ */
 router.get('/signUp', (req, res) => {
-
+    res.send('Sign Up')
 })
 
 router.get('/verify', (req, res) => {
-
+    res.send('Verify')
 })
 
 /** ------------------ Post requests: Creation and Verification  ------------------ */
@@ -28,3 +28,4 @@ router.post('/verify', (req, res) => {
 
 })
 
+module.exports = router;

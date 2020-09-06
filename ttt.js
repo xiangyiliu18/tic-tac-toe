@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 // for solving relative path problem
 const path = require('path')
-// for html parsing
+// for html parsingParse HTTP request body
 const bodyParser = require('body-parser')
 const multer = require('multer')
 // for connecting db
@@ -16,7 +16,7 @@ const session = require('express-session')
 const crypto = require('crypto')
 
 /* ********************** Connect to MongoDB -- mongoose ********/
-// Get Mongoose to use the gloabl promise library
+// Get Mongoose to use the gloabl promise library before mongoose V5
 mongoose.Promise = global.Promise
 // set up default mongoose connection -- localhost/ 127.0.0.1
 mongoose.connect('mongodb://130.245.168.101:27017/project2')
