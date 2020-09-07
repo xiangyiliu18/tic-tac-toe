@@ -1,3 +1,22 @@
 extends index.pug
 
 block content
+    .container.d-flex.justify-content-center.align-items-center
+        .col-6
+            form#loginForm
+                h4.text-center.title Welcome
+                .form-group
+                    label(for='email') Email address
+                    .input-group
+                        .input-group-prepend
+                            i.far.fa-envelope.input-group-text
+                        input.form-control#email(type='email' placeholder='Enter your Email Address' required)
+                .form-group
+                    label(for='password') Password
+                    .input-group
+                        .input-group-prepend
+                            i.fas.fa-lock.input-group-text
+                        input.form-control#password(type='password' required)
+                .text-right
+                    a(href='/signup') Are you are New User?
+                button.btn.btn-primary.btn-block(type='submit') Log In

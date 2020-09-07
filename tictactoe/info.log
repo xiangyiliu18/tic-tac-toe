@@ -1,0 +1,7 @@
+info: Start creating new user with username: tester
+info: {"n":0,"nModified":0,"opTime":{"ts":"6869603218456838147","t":4},"electionId":"7fffffff0000000000000004","ok":1,"$clusterTime":{"clusterTime":"6869603218456838147","signature":{"hash":"KBI2yF2RtaOUh+CKRhWnLJ2KwkY=","keyId":"6869051800490606595"}},"operationTime":"6869603218456838147"}
+info: Start creating new user with username: tester
+info: Start creating new user with username: tester
+info: {"n":1,"nModified":0,"opTime":{"ts":"6869606684495446017","t":4},"electionId":"7fffffff0000000000000004","ok":1,"$clusterTime":{"clusterTime":"6869606684495446017","signature":{"hash":"crJky7G4rn12TG10qrC+QswGrhI=","keyId":"6869051800490606595"}},"operationTime":"6869606684495446017"}
+info: Start creating new user with username: tester
+info: Start creating new user with username: tester

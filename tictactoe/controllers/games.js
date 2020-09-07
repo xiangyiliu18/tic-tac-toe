@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-/** ------------------ Get requests: HTML templates rendered  ------------------ */
 router.get('/', (req, res) => {
-    res.send('Games')
+    res.send('Games Home Page')
 })
 
 router.param('id', function(req, res, next, id) {

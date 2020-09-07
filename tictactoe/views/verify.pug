@@ -1,0 +1,54 @@
+extends index.pug
+
+block content
+    .container.d-flex.justify-content-center.align-items-center
+        .col-5
+            form#verifyForm.form-padding
+                h4.text-center.title Email Confirmation
+                .form-group
+                    label(for='email') Email address
+                    .input-group
+                        .input-group-prepend
+                            i.far.fa-envelope.input-group-text
+                        input.form-control#email(type='email' placeholder="Enter your Email Address" required)
+                .form-group
+                    label(for='code') Verification Code
+                    .input-group
+                        .input-group-prepend
+                            i.fas.fa-unlock.input-group-text
+                        input.form-control#code(type='text' required)
+                .text-right
+                    span Need &nbsp;
+                        a(href='#') Log In ?
+                button.btn.btn-primary.btn-block(type='submit') Verify
+
+block scripts
+    script(type="text/javascript"). 
+        $("#verifyForm").submit(function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/users/verify',
+                dataType: 'json',
+                data: JSON.stringify({
+                    email: $("#email").val(),
+                    code: $("#code").val()
+                }),
+                contentType: 'application/json',
+                success: res =>  {
+                    if(res.status === 'OK'){
+                        window.location.href = `${window.location.origin}/login`;
+                    }
+                    if(res.status === 'ERROR'){
+                        alert("Failed to verify. Please try it later.")
+                    }
+                },
+                error: err => {
+                    console.error(`Server Error: ${JSON.stringify(err)}`);
+                },
+                complete: res => {
+                    this.reset();
+                }
+            });
+        });
+

@@ -1,0 +1,21 @@
+html, body {
+  height: 100%;
+  background-color: whitesmoke;
+}
+
+.image-padding {
+  padding: 10px;
+}
+
+.title {
+  margin: 10px;
+}
+
+.form-padding {
+  padding: 10px 0;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+}

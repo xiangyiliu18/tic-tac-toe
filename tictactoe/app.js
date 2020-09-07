@@ -2,17 +2,15 @@
  * Required External Modules
  */
 const express = require("express");
-const winston = require("winston"); // Logger
-const nodemailer = require("nodemailer");
 const session = require("express-session");
-const crypto = require("crypto"); // Generate the key based on password
 const path = require("path"); // Solve relative path problem
 const mongoose = require("mongoose");
 
-const Game = require("./models/game");
-const User = require("./models/user");
-const userRouter = require("./controllers/users");
-const gameRouter = require("./controllers/games");
+const Logger = require('./controllers/logger');
+const Game = require('./models/game');
+const User = require('./models/user');
+const userRouter = require('./controllers/users');
+const gameRouter = require('./controllers/games');
 
 /**
  * App Variables
@@ -20,16 +18,6 @@ const gameRouter = require("./controllers/games");
 const app = express();
 const port = process.env.PORT || "8000";
 const router = express.Router();
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.simple(),
-  transports: [
-    // - Write all logs with level `error` and below to `error.log`
-    // - Write all logs with level `info` and below to `info.log`
-    new winston.transports.File({ filename: "error.log", level: "error" }),
-    new winston.transports.File({ filename: "info.log" }),
-  ],
-});
 
 /**
  *  App Configuration
@@ -40,6 +28,13 @@ app.set("view engine", "pug"); // Jade has renamed into pug
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: "cheryl",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use("/", router);
 app.use("/users", userRouter);
 app.use("/games", gameRouter);
@@ -57,30 +52,26 @@ mongoose
  * Routes Definitions
  */
 app.get("/", (req, res) => {
-  res.render("index", { title: "Tic Tac Toe", message: "Tic Tac Toe Games" });
+  const currSession = req.session;
+  if (currSession.user) {
+    Logger.info(`--- Current Logged in user: ${currSession.email}`);
+    return res.redirect("/games", {username: currSession.user.username});
+  }
+  res.redirect("/login");
 });
 
 app
-  .route("signup")
+  .route('/login')
   .get((req, res) => {
-    res.render("signup");
+    res.render('login');
   })
   .post((req, res) => {
-    const key = crypto
-      .createHmac("sha256", "password")
-      .update(req.params.password)
-      .digest("hex");
+    console.log('Enter....');
   });
 
-app
-  .route("/login")
-  .get((req, res) => {
-    res.render("signup");
-  })
-  // Handl Login action
-  .post((req, res) => {
-    console.log("Enter....");
-  });
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
 
 app.post("/logout", (req, res) => {});
 
@@ -89,11 +80,4 @@ app.post("/logout", (req, res) => {});
  */
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);
-});
-
-process.on("SIGTERM", () => {
-  debug("SIGTERM signal received: closing HTTP server");
-  server.close(() => {
-    debug("HTTP server closed");
-  });
 });

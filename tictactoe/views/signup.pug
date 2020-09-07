@@ -1,3 +1,59 @@
 extends index.pug
 
 block content
+    .container.d-flex.justify-content-center.align-items-center
+        .col-5
+            form#signupForm.form-padding
+                h4.text-center.title New User
+                .form-group
+                    label(for='username') Username
+                    .input-group
+                        .input-group-prepend
+                            i.far.fa-user.input-group-text
+                        input.form-control#username(type='text' placeholder="Enter your username" required)
+                .form-group
+                    label(for='email') Email address
+                    .input-group
+                        .input-group-prepend
+                            i.far.fa-envelope.input-group-text
+                        input.form-control#email(type='email' placeholder="Enter your email address" required)
+                .form-group
+                    label(for='password') Password
+                    .input-group
+                        .input-group-prepend
+                            i.fas.fa-lock.input-group-text
+                        input.form-control#password(type='password' required)
+                .text-right
+                    a(href='/login') Are you are Current User?
+                button.btn.btn-primary.btn-block(type='submit') Sign Up
+
+block scripts
+    script(type="text/javascript"). 
+        $("#signupForm").submit(function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/users/addUser',
+                dataType: 'json',
+                data: JSON.stringify({
+                    username: $("#username").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val()
+                }),
+                contentType: 'application/json',
+                success: res => {
+                    if(res.status === 'OK'){
+                        window.location.href = `${window.location.origin}/users/verify`;
+                    }
+                    if(res.status === 'ERROR'){
+                        alert("Failed to create new account. Please try it later.")
+                    }
+                },
+                error:  err => {
+                    console.error(`Server Error: ${JSON.stringify(err)}`);
+                },
+                complete: res => {
+                     this.reset();
+                }
+            });
+        });
