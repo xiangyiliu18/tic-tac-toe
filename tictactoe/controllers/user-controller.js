@@ -1,19 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const nodemailer = require("nodemailer");
-const crypto = require("crypto"); // Generate the key based on password
-
-const Logger = require("./logger");
+const {
+  router,
+  nodemailer,
+  crypto,
+  ERROR_STATUS,
+  OK_STATUS,
+} = require("../constants");
+const Logger = require("./logger-controller");
 const User = require("../models/user");
 const smtpTransport = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "cherylliu.work@gmail.com",
-    pass: "630future52work",
+    user: "[Replace with own gamil account",
+    pass: "[Replace with your own password]",
   },
 });
-const ERROR_STATUS = "ERROR";
-const OK_STATUS = "OK";
 
 /**
  *  User Creation
@@ -34,7 +34,7 @@ router.post("/addUser", async (req, res) => {
   });
 
   try {
-    // await newUser.save();
+    await newUser.save();
     //Sending email with key
     const host = req.get("host"),
       link = `http://${host}/users/verify?email=${email}&code=${code}`;
@@ -55,16 +55,24 @@ router.post("/addUser", async (req, res) => {
             err
           )}`
         );
-        res.json({ status: ERROR_STATUS });
+        res.json({
+          status: ERROR_STATUS,
+          error: `Failed to send verification code into ${email}`,
+        });
       }
     });
     smtpTransport.close();
+
+    req.session.user = { username, email };
     res.json({ status: OK_STATUS });
   } catch (err) {
     Logger.error(
       `Failed to create new user [${username}] :  ${JSON.stringify(err)}`
     );
-    res.json({ status: ERROR_STATUS });
+    res.json({
+      status: ERROR_STATUS,
+      error: "Failed to create new account due to server error",
+    });
   }
 });
 
@@ -83,17 +91,17 @@ router
           { $set: { active: true } }
         );
         if (result.n === 1) {
-          return res.render("login");
+          return res.redirect("/login"); // Go to Log In page
         }
       } catch (err) {
-        Logger.info(
+        Logger.error(
           `Failed to verify the email [${email}] with code [${code}]: ${JSON.stringify(
             err
           )}`
         );
       }
     }
-    res.render("verify");
+    res.render("verify"); // Go to Email Confirmation page
   })
   .post(async (req, res) => {
     const { email, code } = req.body;
@@ -103,7 +111,10 @@ router
     );
     result.n === 1
       ? res.json({ status: OK_STATUS })
-      : res.json({ status: ERROR_STATUS });
+      : res.json({
+          status: ERROR_STATUS,
+          error: `Failed to verify the email ${email}, please check your email and code.`,
+        });
   });
 
 module.exports = router;

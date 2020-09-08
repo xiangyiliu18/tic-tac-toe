@@ -1,29 +1,24 @@
-/**
- * Required External Modules
- */
-const express = require("express");
-const session = require("express-session");
-const path = require("path"); // Solve relative path problem
-const mongoose = require("mongoose");
+// Required Modules
+const {
+  express,
+  session,
+  mongoose,
+  path,
+  ERROR_STATUS,
+  OK_STATUS,
+} = require("./constants");
+const Logger = require("./controllers/logger-controller");
+const User = require("./models/user");
+const userRouter = require("./controllers/user-controller");
+const gameRouter = require("./controllers/game-controller");
 
-const Logger = require('./controllers/logger');
-const Game = require('./models/game');
-const User = require('./models/user');
-const userRouter = require('./controllers/users');
-const gameRouter = require('./controllers/games');
-
-/**
- * App Variables
- */
+// App Variables & Configuration
 const app = express();
 const port = process.env.PORT || "8000";
 const router = express.Router();
 
-/**
- *  App Configuration
- */
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug"); // Jade has renamed into pug
+app.set("view engine", "pug");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -33,6 +28,7 @@ app.use(
     secret: "cheryl",
     resave: false,
     saveUninitialized: true,
+    cookie: { maxAge: 3600000 },
   })
 );
 app.use("/", router);
@@ -45,36 +41,83 @@ mongoose
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .catch((error) => {
-    logger.info("Failed to connect MongoDb: %s", JSNO.stringify(error));
+    logger.error(`Failed to connect MongoDb: ${JSNO.stringify(error)}`);
   });
 
-/**
- * Routes Definitions
- */
+// Routing handling
 app.get("/", (req, res) => {
-  const currSession = req.session;
-  if (currSession.user) {
-    Logger.info(`--- Current Logged in user: ${currSession.email}`);
-    return res.redirect("/games", {username: currSession.user.username});
+  const currUser = req.session.user;
+  if (currUser) {
+    // email & username
+    Logger.info(`Current Logged in user: ${currUser.email}`);
+    // Redirect to Game Main Page
+    return res.redirect("/games", { username: currUser.username });
   }
-  res.redirect("/login");
+  res.redirect("/login"); // Need Log In
 });
 
+// Hadnle Log in requests
 app
-  .route('/login')
+  .route("/login")
   .get((req, res) => {
-    res.render('login');
+    if (req.session.user) {
+      return res.redirect("/games");
+    }
+    res.render("login"); // Render Log In Page
   })
-  .post((req, res) => {
-    console.log('Enter....');
+  .post(async (req, res) => {
+    const { email, password } = req.body;
+    const loggedUser = await User.findOne(
+      {
+        email,
+        password,
+        active: true,
+      },
+      "username human wopr"
+    ).exec();
+
+    if (loggedUser) {
+      const user = {
+        email,
+        username: loggedUser.username,
+        score: (loggedUser.human - loggedUser.wopr)
+      };
+      req.session.user = user;
+      return res.json({ status: OK_STATUS });
+    }
+
+    const errMsg = "Invalid email or password.";
+    Logger.error(errMsg);
+    res.json({ status: ERROR_STATUS, error: errMsg });
   });
 
-app.get('/signup', (req, res) => {
-  res.render('signup');
+// Go to User requests handling
+app.get("/signup", (req, res) => {
+  res.render("signup");
 });
 
-app.post("/logout", (req, res) => {});
+// Hadnle Log out requests
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      Logger.error(`Failed to Log out: ${JSON.stringify(err)}`);
+      res.json({
+        status: ERROR_STATUS,
+        error: "Failed to log out due to server error",
+      });
+    } else {
+      res.json({ status: OK_STATUS });
+    }
+  });
+});
 
+router.get("/302", (req, res) => {
+  res.send("302 - Server error");
+});
+
+router.get("/404", (req, res) => {
+  res.send("404 -Not Found");
+});
 /**
  * Server Activation
  */

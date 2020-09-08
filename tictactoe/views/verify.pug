@@ -23,32 +23,4 @@ block content
                 button.btn.btn-primary.btn-block(type='submit') Verify
 
 block scripts
-    script(type="text/javascript"). 
-        $("#verifyForm").submit(function(event){
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/users/verify',
-                dataType: 'json',
-                data: JSON.stringify({
-                    email: $("#email").val(),
-                    code: $("#code").val()
-                }),
-                contentType: 'application/json',
-                success: res =>  {
-                    if(res.status === 'OK'){
-                        window.location.href = `${window.location.origin}/login`;
-                    }
-                    if(res.status === 'ERROR'){
-                        alert("Failed to verify. Please try it later.")
-                    }
-                },
-                error: err => {
-                    console.error(`Server Error: ${JSON.stringify(err)}`);
-                },
-                complete: res => {
-                    this.reset();
-                }
-            });
-        });
-
+    script(type='text/javascript' src='/js/verify-helper.js')

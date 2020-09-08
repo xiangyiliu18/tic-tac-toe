@@ -1,58 +1,51 @@
 # TicTacToe
-## Create Rest API with NodeJS
+## Create REST-based API with ExpressJS
 
 > ### Description
 --- 
-1. Create a REST-based Tic-Tac-Toe service and take **JSON** object. Once a winning or tying move has been sent to the server, the server should consider the game completed and reset the grid.
-2. Request and Response Format
-   1. move: indicate on which square (0-indexed, in reading order) the human is making a move in the current game. It could be 'null' which means without making a move.
-   ```json
-   // Request JSON format
-   {
-	   "move": [],
-   }
-   // Response JSON format
-   {
-	   "grid": [],
-	   "winner":[],
-	   "status": "OK", // OK or ERROR
-   }
-   ```
+   1. **ttt.js**: the 1st version
+      1. there is no UI part. All data will be passed and displayed as JSON
+   2. **/tictactoe**: the newest version
+      1. **app.js**: the entry point
+> ### Description
+--- 
+   Create a REST-based Tic-Tac-Toe service and take **JSON** object as Input and Output
 
 > ### Features supported
 --- 
    1. Develope user-creation system validated with email
-      1. **/adduser, { username:, password:, email: }**
-         1. create a disabled user
-      2. **/verify, { email:, key: }**
-         1. key sent via email (backdoor key is “abracadabra”). Optionally, 
-         2. Make this API call accept a GET request with the two parameters in the query string, to allow for a direct link from the verification email.
-         3. Add cookie-based session support
-      3. **/login, {username:, password:}**
-      4. **/logout**
-   2. Maintain the history of previously played games by each user on the server.
-      1. **/listgames**
-         1. return JSON object: { status:”OK”, games:[ {id:, start_date:}, …] }
-      2. **/getgame, {id: }**
-         1. eturn JSOB object: { status:”OK”, grid:[“X”,”O”,…], winner:”X” }
-      3. **/getscore**
-         1. get { status:”OK”, human:0, wopr: 5, tie: 10 }
+      1. Create Inactive User
+      2. Send verification code via Email
+      3. Able to verify email through url query or Form
+   2. Able to save new game and get history data with specified game ID
+   3. Comminucate through Ajax Call with JSON data between Server and Client
 
 > ### Techs and Packages used
-1. Techs: NodeJS, Apache2, MongoDB
-2. Packages
+1. Techs: NodeJS, MongoDB Cloud
+2. Packages (for the newest version)
 	| Packages/Dependecies | Usage    |
 	| -------- | -------- |
    | express  |          |
 	| nodemailer| Email usage |
 	| express-session| Stores only a session identifier on the client within a cookie and stores the session data on the server|
 	| crypto | Generate the key based on password |
-   | mongoose |         |
+   | mongoose | Store User and Game data |
    | winston  | Logger  |
+   | forever  |         |
+   | pug      | Template Engine |
 
 > ### UI mockups
 ---
 <br>
 
+More details in **/assets/images** folder
+
 ![Mockups about User Creation](./assets/images/user_creation_ui.png)
 
+> ### Project Screenshots
+---
+<br>
+
+<img src="./assets/images/login.png" width="55%" height="55%" alt="Log In Page">
+<img src="./assets/images/main_page.png" width="48%" height="48%" alt="Main Game Page">
+<img src="./assets/images/game_history.png" width="48%" height="48%" alt="Game History Page">

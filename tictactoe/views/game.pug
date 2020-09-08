@@ -1,0 +1,55 @@
+extends index.pug
+
+block content
+    .play-container
+        nav.navbar.navbar-dark.bg-primary.d-flex.justify-content-between
+            span.navbar-brand.mb-0.h1
+                i.fas.fa-home  Tic Tac Toe
+            div.form-inline.my-2.my-lg-0
+                span.lead Hi, #{user.username}&nbsp;&nbsp;
+                .dropdown
+                    button.btn.btn-success.btn-sm.my-2.my-sm-0.dropdown-toggle(type='button' id='games-menu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') All Games
+                    .dropdown-menu.text-center(aria-labelledby='games-menu')
+                        if games.length > 0
+                            each game in games
+                                a.get-game-btn.dropdown-item(onclick=`getGame(${game.id})`) Game ID: #{game.id}
+                        else
+                            span No records available
+                button#log-out.btn.btn-success.btn-sm.my-2.my-sm-0(type='submit')
+                    i.fas.fa-sign-out-alt  Log Out
+        .info-widget.card
+            card-body
+                h6.card-title Game Information
+                p Date: &nbsp;
+                    span#date-display.badge.badge-info
+                p Scores: &nbsp;
+                    span.badge.badge-info=user.score
+        .container.d-flex.justify-content-center.align-items-center
+            .col-6.text-center
+                input#curr-game(type='hidden',value=currGame)
+                h5
+                    if currGame 
+                        span Game ID:&nbsp;
+                        span.badge.badge-info=currGame.id
+                        br
+                        span Winner:&nbsp;
+                    span#winner.badge.badge-info
+                hr
+                h5 Player O: Computer
+                h5 Player X: #{user.username}
+                button#new-btn.game-btn.btn.btn-primary Start New Game
+                button#save-btn.game-btn.btn.btn-success Save Game
+                .main-game-box
+                    .board#board
+                        .box#box-0
+                        .box#box-1
+                        .box#box-2
+                        .box#box-3
+                        .box#box-4
+                        .box#box-5
+                        .box#box-6
+                        .box#box-7
+                        .box#box-8
+
+block scripts
+    script(type='text/javascript' src='/js/game-helper.js')
