@@ -1,31 +1,31 @@
 # TicTacToe
 ## Create REST-based API with ExpressJS
 
-> ### Description
+> ### Brief
 --- 
    1. **ttt.js**: the 1st version
-      1. there is no UI part. All data will be passed and displayed as JSON
-   2. **/tictactoe**: the newest version
-      1. **app.js**: the entry point
+      1. There is no UI part in that version. All data will be passed and displayed in **JSON** format
+   2. **/tictactoe**: The newest version with **UI**
+      1. **app.js**: The entry point
 > ### Description
 --- 
-   Create a REST-based Tic-Tac-Toe service and take **JSON** object as Input and Output
+   Create a REST-based Tic-Tac-Toe Service
 
-> ### Features supported
+> ### Features Supported
 --- 
-   1. Develope user-creation system validated with email
+   1. Develope user-creation system and validated with email
       1. Create Inactive User
       2. Send verification code via Email
       3. Able to verify email through url query or Form
-   2. Able to save new game and get history data with specified game ID
-   3. Comminucate through Ajax Call with JSON data between Server and Client
+   2. Able to save new game and get history data with specified Game ID
+   3. Comminucate through **Ajax** Call with JSON data between Server and Client
 
 > ### Techs and Packages used
-1. Techs: NodeJS, MongoDB Cloud
+1. Techs: **NodeJS, MongoDB Cloud**
 2. Packages (for the newest version)
 	| Packages/Dependecies | Usage    |
 	| -------- | -------- |
-   | express  |          |
+   | express  |      ExpressJS    |
 	| nodemailer| Email usage |
 	| express-session| Stores only a session identifier on the client within a cookie and stores the session data on the server|
 	| crypto | Generate the key based on password |
