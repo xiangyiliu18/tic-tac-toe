@@ -47,8 +47,8 @@ var User = mongoose.model('User', userSchema)
 var smtpTransport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'cheryl123liu@gmail.com',
-    pass: '630future52mm'
+    user: 'put your gmail account here',
+    pass: 'put your password here'
   }
 })
 
