@@ -14,7 +14,7 @@
     "express-session": "^1.17.1",
     "forever": "^3.0.2",
     "mongoose": "^5.10.3",
-    "nodemailer": "^6.4.11",
+    "nodemailer": "^6.4.16",
     "pug": "^3.0.0",
     "winston": "^3.3.3"
   }
